@@ -16,9 +16,9 @@ app.add_middleware(
 # Define symbols with their weights (higher number = more frequent)
 REEL_SYMBOLS = {
     "Vestra Coin": 2, 
-    "Brolyz": 3,   
-    "CMLE head": 4,
-    "Vestran Helmet": 6, 
+    "Brolyz": 4,   
+    "CMLE head": 6,
+    "Vestran Helmet": 7, 
     "Vesty": 8           
 }
 
@@ -27,7 +27,7 @@ PAYOUT_TABLE = {
     # 5 of a kind - Jackpot
     ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin"): 10000,
     ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Brolyz"): 5000,
-    ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "CMLE head"): 2500,
+    ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "CMLE head"): 5000,
     ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet"): 1000,
     ("Vesty", "Vesty", "Vesty", "Vesty", "Vesty"): 500,
 
@@ -39,11 +39,18 @@ PAYOUT_TABLE = {
     ("Vesty", "Vesty", "Vesty", "Vesty", "Any"): 175,
 
     # 3 of a kind
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Any", "Any"): 150,
-    ("Brolyz", "Brolyz", "Brolyz", "Any", "Any"): 125,
-    ("CMLE head", "CMLE head", "CMLE head", "Any", "Any"): 100,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any", "Any"): 75,
-    ("Vesty", "Vesty", "Vesty", "Any", "Any"): 50,
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Any", "Any"): 200,
+    ("Brolyz", "Brolyz", "Brolyz", "Any", "Any"): 150,
+    ("CMLE head", "CMLE head", "CMLE head", "Any", "Any"): 125,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any", "Any"): 100,
+    ("Vesty", "Vesty", "Vesty", "Any", "Any"): 75,
+
+    # 2 of a kind
+    ("Vestra Coin", "Vestra Coin", "Any", "Any", "Any"): 50,
+    ("Brolyz", "Brolyz", "Any", "Any", "Any"): 50,
+    ("CMLE head", "CMLE head", "Any", "Any", "Any"): 50,
+    ("Vestran Helmet", "Vestran Helmet", "Any", "Any", "Any"): 50,
+    ("Vesty", "Vesty", "Any", "Any", "Any"): 50,
 }
 
 # Define request/response models
