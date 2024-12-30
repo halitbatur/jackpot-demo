@@ -23,7 +23,7 @@ REEL_SYMBOLS = {
     "Vesty": 13          # (13/36 chance) - Most common
 }
 
-# Updated payout table with combination-based wins
+# Updated payout table with slightly increased values
 PAYOUT_TABLE = {
     # Five of a kind (any position)
     ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin"): 5000,
@@ -32,41 +32,41 @@ PAYOUT_TABLE = {
     ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet"): 500,
     ("Vesty", "Vesty", "Vesty", "Vesty", "Vesty"): 250,
 
-    # Four of a kind (any position)
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Any"): 750,
-    ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Any"): 400,
-    ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "Any"): 250,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any"): 175,
-    ("Vesty", "Vesty", "Vesty", "Vesty", "Any"): 125,
+    # Four of a kind (increased)
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Any"): 500,
+    ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Any"): 250,
+    ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "Any"): 175,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any"): 125,
+    ("Vesty", "Vesty", "Vesty", "Vesty", "Any"): 85,
 
-    # Full House combinations (3 + 2) - New!
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Brolyz", "Brolyz"): 1000,  # Premium full house
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "CMLE head", "CMLE head"): 800,
-    ("Brolyz", "Brolyz", "Brolyz", "Vestra Coin", "Vestra Coin"): 600,
-    ("Brolyz", "Brolyz", "Brolyz", "CMLE head", "CMLE head"): 400,
-    ("CMLE head", "CMLE head", "CMLE head", "Vestran Helmet", "Vestran Helmet"): 300,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vesty", "Vesty"): 200,
+    # Full House combinations (increased)
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Brolyz", "Brolyz"): 350,
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "CMLE head", "CMLE head"): 300,
+    ("Brolyz", "Brolyz", "Brolyz", "Vestra Coin", "Vestra Coin"): 250,
+    ("Brolyz", "Brolyz", "Brolyz", "CMLE head", "CMLE head"): 200,
+    ("CMLE head", "CMLE head", "CMLE head", "Vestran Helmet", "Vestran Helmet"): 150,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vesty", "Vesty"): 100,
 
-    # Three of a kind (any position)
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Any", "Any"): 175,
-    ("Brolyz", "Brolyz", "Brolyz", "Any", "Any"): 125,
-    ("CMLE head", "CMLE head", "CMLE head", "Any", "Any"): 100,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any", "Any"): 75,
-    ("Vesty", "Vesty", "Vesty", "Any", "Any"): 60,
+    # Three of a kind (increased)
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Any", "Any"): 125,
+    ("Brolyz", "Brolyz", "Brolyz", "Any", "Any"): 100,
+    ("CMLE head", "CMLE head", "CMLE head", "Any", "Any"): 75,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any", "Any"): 60,
+    ("Vesty", "Vesty", "Vesty", "Any", "Any"): 45,
 
-    # Two pair combinations - New!
-    ("Vestra Coin", "Vestra Coin", "Brolyz", "Brolyz", "Any"): 150,
-    ("Vestra Coin", "Vestra Coin", "CMLE head", "CMLE head", "Any"): 125,
-    ("Brolyz", "Brolyz", "CMLE head", "CMLE head", "Any"): 100,
-    ("CMLE head", "CMLE head", "Vestran Helmet", "Vestran Helmet", "Any"): 75,
-    ("Vestran Helmet", "Vestran Helmet", "Vesty", "Vesty", "Any"): 50,
+    # Two pair combinations (increased)
+    ("Vestra Coin", "Vestra Coin", "Brolyz", "Brolyz", "Any"): 75,
+    ("Vestra Coin", "Vestra Coin", "CMLE head", "CMLE head", "Any"): 65,
+    ("Brolyz", "Brolyz", "CMLE head", "CMLE head", "Any"): 55,
+    ("CMLE head", "CMLE head", "Vestran Helmet", "Vestran Helmet", "Any"): 45,
+    ("Vestran Helmet", "Vestran Helmet", "Vesty", "Vesty", "Any"): 35,
 
-    # Two of a kind (any position)
-    ("Vestra Coin", "Vestra Coin", "Any", "Any", "Any"): 45,
-    ("Brolyz", "Brolyz", "Any", "Any", "Any"): 40,
-    ("CMLE head", "CMLE head", "Any", "Any", "Any"): 35,
-    ("Vestran Helmet", "Vestran Helmet", "Any", "Any", "Any"): 30,
-    ("Vesty", "Vesty", "Any", "Any", "Any"): 25,
+    # Two of a kind (increased)
+    ("Vestra Coin", "Vestra Coin", "Any", "Any", "Any"): 35,
+    ("Brolyz", "Brolyz", "Any", "Any", "Any"): 30,
+    ("CMLE head", "CMLE head", "Any", "Any", "Any"): 25,
+    ("Vestran Helmet", "Vestran Helmet", "Any", "Any", "Any"): 20,
+    ("Vesty", "Vesty", "Any", "Any", "Any"): 15,
 }
 
 # Updated response model to include jackpot info
@@ -82,7 +82,7 @@ USER_DATA = {}
 SPIN_COST = 50
 STARTING_POINTS = 5000
 GRAND_JACKPOT = 0
-JACKPOT_INCREMENT = 15  # Each spin adds 15 to jackpot
+JACKPOT_INCREMENT = 10  # Each spin adds 15 to jackpot
 
 def weighted_choice():
     total = sum(REEL_SYMBOLS.values())
