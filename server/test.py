@@ -6,10 +6,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 TEST_PARAMS = {
     "BASE_URL": "http://localhost:8000",
     "TOTAL_USERS": 10,
-    "TOTAL_SPINS": 100,
+    "TOTAL_SPINS": 200,
     "STARTING_POINTS": 5000,
     "SPIN_COST": 50,
-    "MAX_WORKERS": 5
+    "MAX_WORKERS": 10
 }
 
 def spin_for_user(user_id, total_spins, base_url):
@@ -17,33 +17,38 @@ def spin_for_user(user_id, total_spins, base_url):
     requests.get(f"{base_url}/points/{user_id}")
 
     max_points = 0
-    total_payout = 0  # Track total payout for this user
+    total_payout = 0
+    jackpot_wins = 0
+    biggest_jackpot = 0
 
     for i in range(total_spins):
         # Spin the reels for each user
         response = requests.get(f"{base_url}/spin/{user_id}").json()
         points_remaining = response["points_remaining"]
         payout = response["payout"]
-        total_payout += payout  # Add to total payout
+        total_payout += payout
+
+        # Track jackpot wins
+        if response["jackpot_won"]:
+            jackpot_wins += 1
+            biggest_jackpot = max(biggest_jackpot, payout)
+            print(f"\n🎰 JACKPOT WIN! 🎰")
+            print(f"User {user_id} won the grand jackpot of {payout} VP!")
+            print(f"Winning combination: {response['reels']}\n")
 
         # Update max points if current points are higher
         if points_remaining > max_points:
             max_points = points_remaining
 
-        # Print each spin result with payout information
-        print(f"User: {user_id}, Spin {i+1}, Payout: {payout}, Points remaining: {points_remaining}")
+        # Print each spin result
+        print(f"User: {user_id}, Spin {i+1}, Payout: {payout}, Points: {points_remaining}, Current Jackpot: {response['grand_jackpot']}")
 
-        # Small delay to prevent overwhelming the server
         time.sleep(0.1)
 
-    # Calculate average payout for this user
     avg_payout = total_payout / total_spins
+    final_points = requests.get(f"{base_url}/points/{user_id}").json()["points"]
 
-    # Get final points for each user
-    final_points_response = requests.get(f"{base_url}/points/{user_id}").json()
-    final_points = final_points_response["points"]
-
-    return final_points, max_points, avg_payout, total_payout
+    return final_points, max_points, avg_payout, total_payout, jackpot_wins, biggest_jackpot
 
 def test_multiple_users_parallel():
     user_ids = [f"user_{i}" for i in range(TEST_PARAMS["TOTAL_USERS"])]
@@ -59,7 +64,7 @@ def test_multiple_users_parallel():
         for future in as_completed(futures):
             user_id = futures[future]
             try:
-                final_points, max_points, avg_payout, total_payout = future.result()
+                final_points, max_points, avg_payout, total_payout, jackpot_wins, biggest_jackpot = future.result()
                 user_final_points.append(final_points)
                 user_max_points.append(max_points)
                 user_avg_payouts.append(avg_payout)
@@ -106,6 +111,26 @@ def test_multiple_users_parallel():
         print(f"Average loser payout: {avg_loser_payout:.2f}")
         worst_loser = min(losers, key=lambda x: x[1])
         print(f"Biggest loser: {worst_loser[0]} (avg payout: {worst_loser[1]:.2f})")
+
+    total_spins = TEST_PARAMS['TOTAL_USERS'] * TEST_PARAMS['TOTAL_SPINS']
+    total_spent = total_spins * TEST_PARAMS['SPIN_COST']
+    rtp = (total_payout_all_users / total_spent) * 100
+
+    print(f"\n=== RTP Analysis ===")
+    print(f"Total money spent: {total_spent}")
+    print(f"Total money returned: {total_payout_all_users}")
+    print(f"RTP: {rtp:.2f}%")
+
+    # Add jackpot statistics
+    total_jackpot_wins = sum(future.result()[4] for future in as_completed(futures))
+    biggest_jackpot_win = max(future.result()[5] for future in as_completed(futures))
+    
+    print("\n=== Jackpot Statistics ===")
+    print(f"Total Jackpot Wins: {total_jackpot_wins}")
+    if total_jackpot_wins > 0:
+        print(f"Biggest Jackpot Won: {biggest_jackpot_win} VP")
+        jackpot_win_rate = (total_jackpot_wins / (TEST_PARAMS['TOTAL_USERS'] * TEST_PARAMS['TOTAL_SPINS'])) * 100
+        print(f"Jackpot Win Rate: {jackpot_win_rate:.4f}%")
 
 if __name__ == "__main__":
     test_multiple_users_parallel()
