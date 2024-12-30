@@ -16,42 +16,57 @@ app.add_middleware(
 
 # Define symbols with their weights (keeping the same distribution)
 REEL_SYMBOLS = {
-    "Vestra Coin": 1,    # (1/36 chance)
+    "Vestra Coin": 1,    # (1/36 chance) - Most premium
     "Brolyz": 4,         # (4/36 chance)
     "CMLE head": 8,      # (8/36 chance)
     "Vestran Helmet": 10, # (10/36 chance)
-    "Vesty": 13          # (13/36 chance)
+    "Vesty": 13          # (13/36 chance) - Most common
 }
 
-# Updated payout table with slightly reduced values
+# Updated payout table with combination-based wins
 PAYOUT_TABLE = {
-    # Five of a kind (keeping these high for excitement)
+    # Five of a kind (any position)
     ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin"): 5000,
-    ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Brolyz"): 2500,
+    ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Brolyz"): 2000,
     ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "CMLE head"): 1000,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet"): 750,
-    ("Vesty", "Vesty", "Vesty", "Vesty", "Vesty"): 500,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet"): 500,
+    ("Vesty", "Vesty", "Vesty", "Vesty", "Vesty"): 250,
 
-    # Four of a kind (slightly reduced)
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Any"): 400,
-    ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Any"): 200,
-    ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "Any"): 150,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any"): 100,
-    ("Vesty", "Vesty", "Vesty", "Vesty", "Any"): 65,
+    # Four of a kind (any position)
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Vestra Coin", "Any"): 750,
+    ("Brolyz", "Brolyz", "Brolyz", "Brolyz", "Any"): 400,
+    ("CMLE head", "CMLE head", "CMLE head", "CMLE head", "Any"): 250,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any"): 175,
+    ("Vesty", "Vesty", "Vesty", "Vesty", "Any"): 125,
 
-    # Three of a kind (slightly reduced)
-    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Any", "Any"): 85,
-    ("Brolyz", "Brolyz", "Brolyz", "Any", "Any"): 65,
-    ("CMLE head", "CMLE head", "CMLE head", "Any", "Any"): 50,
-    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any", "Any"): 40,
-    ("Vesty", "Vesty", "Vesty", "Any", "Any"): 30,
+    # Full House combinations (3 + 2) - New!
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Brolyz", "Brolyz"): 1000,  # Premium full house
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "CMLE head", "CMLE head"): 800,
+    ("Brolyz", "Brolyz", "Brolyz", "Vestra Coin", "Vestra Coin"): 600,
+    ("Brolyz", "Brolyz", "Brolyz", "CMLE head", "CMLE head"): 400,
+    ("CMLE head", "CMLE head", "CMLE head", "Vestran Helmet", "Vestran Helmet"): 300,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Vesty", "Vesty"): 200,
 
-    # Two of a kind (keeping 5 VP increments)
-    ("Vestra Coin", "Vestra Coin", "Any", "Any", "Any"): 25,
-    ("Brolyz", "Brolyz", "Any", "Any", "Any"): 20,
-    ("CMLE head", "CMLE head", "Any", "Any", "Any"): 15,
-    ("Vestran Helmet", "Vestran Helmet", "Any", "Any", "Any"): 10,
-    ("Vesty", "Vesty", "Any", "Any", "Any"): 5,
+    # Three of a kind (any position)
+    ("Vestra Coin", "Vestra Coin", "Vestra Coin", "Any", "Any"): 175,
+    ("Brolyz", "Brolyz", "Brolyz", "Any", "Any"): 125,
+    ("CMLE head", "CMLE head", "CMLE head", "Any", "Any"): 100,
+    ("Vestran Helmet", "Vestran Helmet", "Vestran Helmet", "Any", "Any"): 75,
+    ("Vesty", "Vesty", "Vesty", "Any", "Any"): 60,
+
+    # Two pair combinations - New!
+    ("Vestra Coin", "Vestra Coin", "Brolyz", "Brolyz", "Any"): 150,
+    ("Vestra Coin", "Vestra Coin", "CMLE head", "CMLE head", "Any"): 125,
+    ("Brolyz", "Brolyz", "CMLE head", "CMLE head", "Any"): 100,
+    ("CMLE head", "CMLE head", "Vestran Helmet", "Vestran Helmet", "Any"): 75,
+    ("Vestran Helmet", "Vestran Helmet", "Vesty", "Vesty", "Any"): 50,
+
+    # Two of a kind (any position)
+    ("Vestra Coin", "Vestra Coin", "Any", "Any", "Any"): 45,
+    ("Brolyz", "Brolyz", "Any", "Any", "Any"): 40,
+    ("CMLE head", "CMLE head", "Any", "Any", "Any"): 35,
+    ("Vestran Helmet", "Vestran Helmet", "Any", "Any", "Any"): 30,
+    ("Vesty", "Vesty", "Any", "Any", "Any"): 25,
 }
 
 # Updated response model to include jackpot info
@@ -82,39 +97,61 @@ def weighted_choice():
 def calculate_payout(reels: list[str]) -> tuple[int, bool]:
     global GRAND_JACKPOT
     
-    # Check for grand jackpot (one of each symbol)
-    unique_symbols = set(reels)
-    jackpot_won = False
-    total_payout = 0
-    
-    if len(unique_symbols) == len(REEL_SYMBOLS):
-        # Won the grand jackpot!
-        total_payout = GRAND_JACKPOT
-        jackpot_won = True
-        GRAND_JACKPOT = 0  # Reset jackpot
-    
-    # Calculate regular wins
+    # Count occurrences of each symbol
     symbol_counts = {}
     for symbol in reels:
         symbol_counts[symbol] = symbol_counts.get(symbol, 0) + 1
+    
+    # Check for grand jackpot (one of each symbol)
+    if len(symbol_counts) == len(REEL_SYMBOLS):
+        jackpot_amount = GRAND_JACKPOT
+        GRAND_JACKPOT = 0  # Reset jackpot
+        return jackpot_amount, True
 
-    max_regular_payout = 0
-    for pattern, payout in PAYOUT_TABLE.items():
-        pattern_counts = {}
-        for symbol in pattern:
-            if symbol != "Any":
-                pattern_counts[symbol] = pattern_counts.get(symbol, 0) + 1
+    # Sort symbols by count (descending) and then by value (premium first)
+    sorted_symbols = sorted(
+        symbol_counts.items(),
+        key=lambda x: (-x[1], -list(REEL_SYMBOLS.keys()).index(x[0]))
+    )
 
-        matches = True
-        for symbol, count in pattern_counts.items():
-            if symbol_counts.get(symbol, 0) < count:
-                matches = False
-                break
+    # Check for five of a kind
+    if sorted_symbols[0][1] == 5:
+        symbol = sorted_symbols[0][0]
+        return PAYOUT_TABLE.get((symbol,) * 5, 0), False
 
-        if matches:
-            max_regular_payout = max(max_regular_payout, payout)
+    # Check for four of a kind
+    if sorted_symbols[0][1] == 4:
+        symbol = sorted_symbols[0][0]
+        return PAYOUT_TABLE.get((symbol,) * 4 + ("Any",), 0), False
 
-    return (total_payout + max_regular_payout, jackpot_won)
+    # Check for full house (3 + 2)
+    if len(sorted_symbols) >= 2 and sorted_symbols[0][1] == 3 and sorted_symbols[1][1] == 2:
+        symbol1 = sorted_symbols[0][0]  # 3 of a kind
+        symbol2 = sorted_symbols[1][0]  # pair
+        full_house_key = (symbol1,) * 3 + (symbol2,) * 2
+        if full_house_key in PAYOUT_TABLE:
+            return PAYOUT_TABLE[full_house_key], False
+
+    # Check for three of a kind
+    if sorted_symbols[0][1] == 3:
+        symbol = sorted_symbols[0][0]
+        return PAYOUT_TABLE.get((symbol,) * 3 + ("Any", "Any"), 0), False
+
+    # Check for two pair
+    if len(sorted_symbols) >= 2 and sorted_symbols[0][1] == 2 and sorted_symbols[1][1] == 2:
+        symbol1 = sorted_symbols[0][0]  # first pair
+        symbol2 = sorted_symbols[1][0]  # second pair
+        two_pair_key = (symbol1,) * 2 + (symbol2,) * 2 + ("Any",)
+        if two_pair_key in PAYOUT_TABLE:
+            return PAYOUT_TABLE[two_pair_key], False
+
+    # Check for pair (two of a kind)
+    if sorted_symbols[0][1] == 2:
+        symbol = sorted_symbols[0][0]
+        return PAYOUT_TABLE.get((symbol,) * 2 + ("Any", "Any", "Any"), 0), False
+
+    # No winning combination
+    return 0, False
 
 @app.get("/spin/{user_id}", response_model=SpinResponse)
 async def spin_jackpot(user_id: str):

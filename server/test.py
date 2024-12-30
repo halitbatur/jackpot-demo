@@ -13,42 +13,37 @@ TEST_PARAMS = {
 }
 
 def spin_for_user(user_id, total_spins, base_url):
-    # Initialize user points
     requests.get(f"{base_url}/points/{user_id}")
-
+    
     max_points = 0
     total_payout = 0
     jackpot_wins = 0
-    biggest_jackpot = 0
+    jackpot_amount = 0
+    regular_payout = 0  # New: track regular payouts separately
 
     for i in range(total_spins):
-        # Spin the reels for each user
         response = requests.get(f"{base_url}/spin/{user_id}").json()
         points_remaining = response["points_remaining"]
         payout = response["payout"]
-        total_payout += payout
-
-        # Track jackpot wins
+        
+        # Separate jackpot wins from regular payouts
         if response["jackpot_won"]:
             jackpot_wins += 1
-            biggest_jackpot = max(biggest_jackpot, payout)
-            print(f"\n🎰 JACKPOT WIN! 🎰")
-            print(f"User {user_id} won the grand jackpot of {payout} VP!")
-            print(f"Winning combination: {response['reels']}\n")
+            jackpot_amount += payout
+        else:
+            regular_payout += payout
+            total_payout += payout
 
-        # Update max points if current points are higher
         if points_remaining > max_points:
             max_points = points_remaining
 
-        # Print each spin result
-        print(f"User: {user_id}, Spin {i+1}, Payout: {payout}, Points: {points_remaining}, Current Jackpot: {response['grand_jackpot']}")
-
+        print(f"User: {user_id}, Spin {i+1}, Payout: {payout}, Points: {points_remaining}")
         time.sleep(0.1)
 
-    avg_payout = total_payout / total_spins
+    avg_payout = regular_payout / total_spins  # Calculate average using regular payouts only
     final_points = requests.get(f"{base_url}/points/{user_id}").json()["points"]
 
-    return final_points, max_points, avg_payout, total_payout, jackpot_wins, biggest_jackpot
+    return final_points, max_points, avg_payout, regular_payout, jackpot_wins, jackpot_amount
 
 def test_multiple_users_parallel():
     user_ids = [f"user_{i}" for i in range(TEST_PARAMS["TOTAL_USERS"])]
@@ -64,7 +59,7 @@ def test_multiple_users_parallel():
         for future in as_completed(futures):
             user_id = futures[future]
             try:
-                final_points, max_points, avg_payout, total_payout, jackpot_wins, biggest_jackpot = future.result()
+                final_points, max_points, avg_payout, total_payout, jackpot_wins, jackpot_amount = future.result()
                 user_final_points.append(final_points)
                 user_max_points.append(max_points)
                 user_avg_payouts.append(avg_payout)
@@ -114,23 +109,32 @@ def test_multiple_users_parallel():
 
     total_spins = TEST_PARAMS['TOTAL_USERS'] * TEST_PARAMS['TOTAL_SPINS']
     total_spent = total_spins * TEST_PARAMS['SPIN_COST']
-    rtp = (total_payout_all_users / total_spent) * 100
 
-    print(f"\n=== RTP Analysis ===")
+    # Calculate RTP without jackpot wins
+    total_regular_payout = sum(future.result()[3] for future in as_completed(futures))
+    rtp = (total_regular_payout / total_spent) * 100
+
+    print(f"\n=== RTP Analysis (excluding jackpots) ===")
     print(f"Total money spent: {total_spent}")
-    print(f"Total money returned: {total_payout_all_users}")
-    print(f"RTP: {rtp:.2f}%")
+    print(f"Total regular payouts: {total_regular_payout}")
+    print(f"Base RTP: {rtp:.2f}%")
 
-    # Add jackpot statistics
+    # Separate jackpot statistics
     total_jackpot_wins = sum(future.result()[4] for future in as_completed(futures))
-    biggest_jackpot_win = max(future.result()[5] for future in as_completed(futures))
+    total_jackpot_amount = sum(future.result()[5] for future in as_completed(futures))
     
     print("\n=== Jackpot Statistics ===")
     print(f"Total Jackpot Wins: {total_jackpot_wins}")
     if total_jackpot_wins > 0:
-        print(f"Biggest Jackpot Won: {biggest_jackpot_win} VP")
+        print(f"Total Jackpot Amount Won: {total_jackpot_amount} VP")
+        print(f"Average Jackpot Size: {total_jackpot_amount/total_jackpot_wins:.2f} VP")
         jackpot_win_rate = (total_jackpot_wins / (TEST_PARAMS['TOTAL_USERS'] * TEST_PARAMS['TOTAL_SPINS'])) * 100
         print(f"Jackpot Win Rate: {jackpot_win_rate:.4f}%")
+
+    # Calculate effective RTP including jackpots
+    total_payout_with_jackpots = total_regular_payout + total_jackpot_amount
+    effective_rtp = (total_payout_with_jackpots / total_spent) * 100
+    print(f"\nEffective RTP (including jackpots): {effective_rtp:.2f}%")
 
 if __name__ == "__main__":
     test_multiple_users_parallel()
